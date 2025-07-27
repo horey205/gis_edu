@@ -1,51 +1,64 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coordinate Calculator</title>
+    <title>좌표 계산기 및 면적</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Coordinate Calculator</h1>
-
+        <h1>좌표 계산기 및 면적</h1>
 
         <div class="input-group">
-            <h2>Origin Point</h2>
-            <label for="originX">X Coordinate:</label>
-            <input type="number" id="originX" value="0">
-            <label for="originY">Y Coordinate:</label>
-            <input type="number" id="originY" value="0">
+            <h2>A점 (기준점)</h2>
+            <label for="pointAX">X 좌표:</label>
+            <input type="number" id="pointAX" placeholder="예: 200.000">
+            <label for="pointAY">Y 좌표:</label>
+            <input type="number" id="pointAY" placeholder="예: 150.000">
         </div>
 
-
-        <div id="pointsContainer">
-            <div class="point-input">
-                <h2>Point 1</h2>
-                <label for="bearingDeg1">Bearing (Degrees):</label>
-                <input type="number" id="bearingDeg1" value="0" min="0" max="359">
-                <label for="bearingMin1">Minutes:</label>
-                <input type="number" id="bearingMin1" value="0" min="0" max="59">
-                <label for="bearingSec1">Seconds:</label>
-                <input type="number" id="bearingSec1" value="0" min="0" max="59">
-                <label for="distance1">Distance:</label>
-                <input type="number" id="distance1" value="0">
-            </div>
+        <div class="point-input">
+            <h2>P점 계산 (A점 기준)</h2>
+            <label for="bearingP">방위각 (도-분-초, 예: 123-45-50):</label>
+            <input type="text" id="bearingP" placeholder="예: 123-45-50">
+            <label for="distanceP">수평거리 (m):</label>
+            <input type="number" id="distanceP" placeholder="예: 25.000">
         </div>
 
+        <div class="point-input">
+            <h2>B점 계산 (A점 기준)</h2>
+            <label for="bearingB">방위각 (도-분-초, 예: 193-13-25):</label>
+            <input type="text" id="bearingB" placeholder="예: 193-13-25">
+            <label for="distanceB">수평거리 (m):</label>
+            <input type="number" id="distanceB" placeholder="예: 15.514">
+        </div>
 
-        <button id="addPoint">Add Another Point</button>
-        <button id="calculateBtn">Calculate Coordinates</button>
+        <div class="point-input">
+            <h2>Q점 계산 (B점 기준)</h2>
+            <label for="bearingQ">방위각 (도-분-초, 예: 85-46-12):</label>
+            <input type="text" id="bearingQ" placeholder="예: 85-46-12">
+            <label for="distanceQ">수평거리 (m):</label>
+            <input type="number" id="distanceQ" placeholder="예: 19.375">
+        </div>
 
+        <button id="calculateBtn">좌표 및 면적 계산</button>
 
         <div class="results">
-            <h2>Calculated Coordinates</h2>
-            <div id="calculatedResults">
-                </div>
+            <h2>계산된 좌표</h2>
+            <div id="calculatedCoordinates">
+                <p><strong>A점:</strong> X: <span id="displayAX"></span>, Y: <span id="displayAY"></span></p>
+                <p><strong>P점:</strong> X: <span id="displayPX"></span>, Y: <span id="displayPY"></span></p>
+                <p><strong>B점:</strong> X: <span id="displayBX"></span>, Y: <span id="displayBY"></span></p>
+                <p><strong>Q점:</strong> X: <span id="displayQX"></span>, Y: <span id="displayQY"></span></p>
+            </div>
+
+            <h2>계산된 면적 (P-A-B-Q)</h2>
+            <div id="calculatedArea">
+                <p>면적: <span id="displayArea"></span> m²</p>
+            </div>
         </div>
     </div>
-
 
     <script src="script.js"></script>
 </body>
