@@ -4,14 +4,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Helper function to parse "도-분-초" string
     function parseDMS(dmsString) {
         const parts = dmsString.split('-').map(Number);
-        if (parts.length === 3 && !parts.some(isNaN)) { // 모든 부분이 숫자인지 확인
+        if (parts.length === 3 && !parts.some(isNaN)) {
             return {
                 degrees: parts[0],
                 minutes: parts[1],
                 seconds: parts[2]
             };
         }
-        return null; // 유효하지 않은 형식일 경우 null 반환
+        return null;
     }
 
     // Function to convert degrees, minutes, seconds to radians
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const n = points.length;
 
         for (let i = 0; i < n; i++) {
-            const j = (i + 1) % n; // Next point index, wraps around to 0 for the last point
+            const j = (i + 1) % n;
             area += (points[i].x * points[j].y);
             area -= (points[i].y * points[j].x);
         }
@@ -81,7 +81,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         const bearingP_rad = dmsToRadians(bearingP_dms.degrees, bearingP_dms.minutes, bearingP_dms.seconds);
-        const pointP = calculateNewCoordinate(pointAX, pointAY, bearingP_rad, distanceP);
+        const pointP_raw = calculateNewCoordinate(pointAX, pointAY, bearingP_rad, distanceP);
+        const pointP = { x: pointP_raw.x.toFixed(3), y: pointP_raw.y.toFixed(3) };
 
         // 3. B점 계산 (A점 기준)
         const bearingB_dms_str = document.getElementById('bearingB').value;
@@ -97,7 +98,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         const bearingB_rad = dmsToRadians(bearingB_dms.degrees, bearingB_dms.minutes, bearingB_dms.seconds);
-        const pointB = calculateNewCoordinate(pointAX, pointAY, bearingB_rad, distanceB); // A점 기준!
+        const pointB_raw = calculateNewCoordinate(pointAX, pointAY, bearingB_rad, distanceB);
+        const pointB = { x: pointB_raw.x.toFixed(3), y: pointB_raw.y.toFixed(3) };
 
         // 4. Q점 계산 (B점 기준)
         const bearingQ_dms_str = document.getElementById('bearingQ').value;
@@ -113,26 +115,27 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         const bearingQ_rad = dmsToRadians(bearingQ_dms.degrees, bearingQ_dms.minutes, bearingQ_dms.seconds);
-        const pointQ = calculateNewCoordinate(pointB.x, pointB.y, bearingQ_rad, distanceQ);
+        const pointQ_raw = calculateNewCoordinate(parseFloat(pointB.x), parseFloat(pointB.y), bearingQ_rad, distanceQ);
+        const pointQ = { x: pointQ_raw.x.toFixed(3), y: pointQ_raw.y.toFixed(3) };
 
         // 5. 결과 표시
         document.getElementById('displayAX').textContent = pointAX.toFixed(4);
         document.getElementById('displayAY').textContent = pointAY.toFixed(4);
-        document.getElementById('displayPX').textContent = pointP.x.toFixed(4);
-        document.getElementById('displayPY').textContent = pointP.y.toFixed(4);
-        document.getElementById('displayBX').textContent = pointB.x.toFixed(4);
-        document.getElementById('displayBY').textContent = pointB.y.toFixed(4);
-        document.getElementById('displayQX').textContent = pointQ.x.toFixed(4);
-        document.getElementById('displayQY').textContent = pointQ.y.toFixed(4);
+        document.getElementById('displayPX').textContent = pointP.x;
+        document.getElementById('displayPY').textContent = pointP.y;
+        document.getElementById('displayBX').textContent = pointB.x;
+        document.getElementById('displayBY').textContent = pointB.y;
+        document.getElementById('displayQX').textContent = pointQ.x;
+        document.getElementById('displayQY').textContent = pointQ.y;
 
         // 6. 면적 계산 및 표시 (P, A, B, Q 순서)
         const polygonPoints = [
-            { x: pointP.x, y: pointP.y },
-            { x: pointAX, y: pointAY }, // A점
-            { x: pointB.x, y: pointB.y },
-            { x: pointQ.x, y: pointQ.y }
+            { x: parseFloat(pointP.x), y: parseFloat(pointP.y) },
+            { x: pointAX, y: pointAY },
+            { x: parseFloat(pointB.x), y: parseFloat(pointB.y) },
+            { x: parseFloat(pointQ.x), y: parseFloat(pointQ.y) }
         ];
         const area = calculatePolygonArea(polygonPoints);
-        document.getElementById('displayArea').textContent = area.toFixed(3); // 면적을 소수점 셋째 자리까지 표시하도록 수정
+        document.getElementById('displayArea').textContent = area.toFixed(3);
     });
 });
